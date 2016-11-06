@@ -1,5 +1,8 @@
 node_modules/
 coverage/
+packages/ubiquity/db/
+packages/ubiquity/avatars/*
+!packages/ubiquity/avatars/.gitkeep
 
 !.editorconfig
 !.gitignore

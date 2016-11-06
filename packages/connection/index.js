@@ -199,11 +199,13 @@ class Connection extends EventEmitter {
     return new Promise((resolve, reject) => {
       element = element.root()
 
-      const {name} = element
-      const NS = element.getNS()
-      if (NS !== this.NS && name === 'iq' || name === 'message' || name === 'presence') {
-        element.attrs.xmlns = this.NS
-      }
+      // const {name} = element
+      // const NS = element.getNS()
+      // if (NS !== this.NS && name === 'iq' || name === 'message' || name === 'presence') {
+      //   element.attrs.xmlns = this.NS
+      // }
+
+      this.emit('send', element)
 
       this.write(element).then(resolve, reject)
     })
@@ -261,10 +263,13 @@ class Connection extends EventEmitter {
     })
   }
 
-  use (plugin) {
-    if (this.plugins.includes(plugin)) return
-    this.plugins.push(plugin)
-    plugin(this)
+  plugin(plugin) {
+    if (!this.plugins[plugin.name]) {
+      this.plugins[plugin.name] = plugin.plugin(this)
+      if (this.plugins[plugin.name].register) this.plugins[plugin.name].register()
+    }
+
+    return this.plugins[plugin.name]
   }
 
   // override
