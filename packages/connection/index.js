@@ -238,7 +238,7 @@ class Connection extends EventEmitter {
   isStanza (element) {
     const {name} = element
     return this.online &&
-      element.getNS() === this.NS &&
+      element.getNS() ? element.getNS() === this.NS : true &&
       (name === 'iq' || name === 'message' || name === 'presence')
   }
 
